@@ -37,6 +37,16 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
             AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
         }
 
+        [Theory]
+        [InlineData(typeof(string[]), "String[]")]
+        [InlineData(typeof(int[]), "Int32[]")]
+        [InlineData(typeof(long[]), "Int64[]")]
+        [InlineData(typeof(bool[]), "Boolean[]")]
+        public void ReturnsNameForArrayTypesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
         private void AssertThatTypeReturnsReadableTypeName(Type type, string expectedReadableTypeName)
         {
             var returnedReadableTypeName = type.GetReadableTypeName();
