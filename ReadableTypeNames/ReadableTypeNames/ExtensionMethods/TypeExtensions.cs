@@ -17,7 +17,18 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
         {
             if (type is null) throw new ArgumentNullException(nameof(type));
             
-            return type.Name;
+            return TryGetNullableTypeName(type) ?? type.Name;
+        }
+
+        private static string? TryGetNullableTypeName(Type type)
+        {
+            var nullableType = Nullable.GetUnderlyingType(type);
+            if (nullableType != null)
+            {
+                return $"{nullableType.Name}?";
+            }
+
+            return null;
         }
     }
 }

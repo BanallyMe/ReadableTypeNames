@@ -23,7 +23,21 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
         [InlineData(typeof(bool), "Boolean")]
         [InlineData(typeof(float), "Single")]
         [InlineData(typeof(long), "Int64")]
-        public void ReturnsSimpleTypesCorrectly(Type type, string expectedReadableTypeName)
+        public void ReturnsNameForSimpleTypesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(int?), "Int32?")]
+        [InlineData(typeof(bool?), "Boolean?")]
+        [InlineData(typeof(long?), "Int64?")]
+        public void ReturnsNameForNullableTypesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        private void AssertThatTypeReturnsReadableTypeName(Type type, string expectedReadableTypeName)
         {
             var returnedReadableTypeName = type.GetReadableTypeName();
 
