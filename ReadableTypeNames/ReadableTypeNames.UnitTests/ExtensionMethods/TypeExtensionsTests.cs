@@ -49,10 +49,73 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
         }
 
         [Theory]
+        [InlineData(typeof(int?[]), "Int32?[]")]
+        [InlineData(typeof(long?[]), "Int64?[]")]
+        [InlineData(typeof(bool?[]), "Boolean?[]")]
+        public void ReturnsNameForArrayOfNullablesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<string>[]), "IEnumerable<String>[]")]
+        [InlineData(typeof(IEnumerable<int>[]), "IEnumerable<Int32>[]")]
+        [InlineData(typeof(KeyValuePair<string, int>[]), "KeyValuePair<String, Int32>[]")]
+        public void ReturnsNameForArrayOfGenericsCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
         [InlineData(typeof(IEnumerable<string>), "IEnumerable<String>")]
         [InlineData(typeof(IEnumerable<int>), "IEnumerable<Int32>")]
         [InlineData(typeof(KeyValuePair<string, int>), "KeyValuePair<String, Int32>")]
         public void ReturnsNameForGenericTypesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<bool?>), "IEnumerable<Boolean?>")]
+        [InlineData(typeof(IEnumerable<int?>), "IEnumerable<Int32?>")]
+        [InlineData(typeof(KeyValuePair<string, int?>), "KeyValuePair<String, Int32?>")]
+        public void ReturnsNameForGenericTypesWithNullableGenericArgumentCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<bool[]>), "IEnumerable<Boolean[]>")]
+        [InlineData(typeof(IEnumerable<int[]>), "IEnumerable<Int32[]>")]
+        [InlineData(typeof(KeyValuePair<string, int[]>), "KeyValuePair<String, Int32[]>")]
+        public void ReturnsNameForGenericTypesWithArrayGenericArgumentCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<bool?[]>), "IEnumerable<Boolean?[]>")]
+        [InlineData(typeof(IEnumerable<int?[]>), "IEnumerable<Int32?[]>")]
+        [InlineData(typeof(KeyValuePair<string, int?[]>), "KeyValuePair<String, Int32?[]>")]
+        public void ReturnsNameForGenericTypesWithNullableArrayGenericArgumentCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<IEnumerable<bool>>), "IEnumerable<IEnumerable<Boolean>>")]
+        [InlineData(typeof(IEnumerable<IEnumerable<int>>), "IEnumerable<IEnumerable<Int32>>")]
+        [InlineData(typeof(KeyValuePair<string, IEnumerable<int>>), "KeyValuePair<String, IEnumerable<Int32>>")]
+        public void ReturnsNameForNestedGenericTypeCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
+
+        [Theory]
+        [InlineData(typeof(IEnumerable<IEnumerable<bool?[]>>), "IEnumerable<IEnumerable<Boolean?[]>>")]
+        [InlineData(typeof(IEnumerable<IEnumerable<KeyValuePair<bool?, int[]>>>), "IEnumerable<IEnumerable<KeyValuePair<Boolean?, Int32[]>>>")]
+        [InlineData(typeof(KeyValuePair<string, IEnumerable<int?[]>>), "KeyValuePair<String, IEnumerable<Int32?[]>>")]
+        public void ReturnsNameForDeeplyNestedTypesCorrectly(Type type, string expectedReadableTypeName)
         {
             AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
         }

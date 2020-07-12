@@ -20,6 +20,7 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
             if (type is null) throw new ArgumentNullException(nameof(type));
             
             return TryGetNullableTypeName(type)
+                ?? TryGetArrayTypeName(type)
                 ?? TryGetGenericTypeName(type)
                 ?? type.Name;
         }
@@ -33,6 +34,15 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
             return $"{nullableType.Name}?";
         }
 
+        private static string? TryGetArrayTypeName(Type type)
+        {
+            if (!type.IsArray)
+                return null;
+
+            var basicTypeName = type.GetElementType().GetReadableTypeName();
+            return $"{basicTypeName}[]";
+        }
+
         private static string? TryGetGenericTypeName(Type type)
         {
             var typeInfo = type.GetTypeInfo();
@@ -40,7 +50,7 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
                 return null;
             
             var basicType = type.Name.Split('`')[0];
-            var genericArgumentNames = type.GenericTypeArguments.Select(genericType => genericType.Name);
+            var genericArgumentNames = type.GenericTypeArguments.Select(genericType => genericType.GetReadableTypeName());
             var genericTypesString = string.Join(", ", genericArgumentNames);
             return $"{basicType}<{genericTypesString}>";
         }
