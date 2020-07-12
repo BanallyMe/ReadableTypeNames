@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace BanallyMe.ReadableTypeNames.ExtensionMethods
 {
@@ -17,18 +19,30 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
         {
             if (type is null) throw new ArgumentNullException(nameof(type));
             
-            return TryGetNullableTypeName(type) ?? type.Name;
+            return TryGetNullableTypeName(type)
+                ?? TryGetGenericTypeName(type)
+                ?? type.Name;
         }
 
         private static string? TryGetNullableTypeName(Type type)
         {
             var nullableType = Nullable.GetUnderlyingType(type);
-            if (nullableType != null)
-            {
-                return $"{nullableType.Name}?";
-            }
+            if (nullableType is null)
+                return null;
 
-            return null;
+            return $"{nullableType.Name}?";
+        }
+
+        private static string? TryGetGenericTypeName(Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            if (!typeInfo.IsGenericType)
+                return null;
+            
+            var basicType = type.Name.Split('`')[0];
+            var genericArgumentNames = type.GenericTypeArguments.Select(genericType => genericType.Name);
+            var genericTypesString = string.Join(", ", genericArgumentNames);
+            return $"{basicType}<{genericTypesString}>";
         }
     }
 }
