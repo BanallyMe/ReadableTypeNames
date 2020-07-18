@@ -3,7 +3,7 @@ The readableTypeNames library simply does, what its name says: It provides a nam
 
 
 ## Project status
-![Build and Test](https://github.com/BanallyMe/ReadableTypeNames/workflows/Build%20and%20Test/badge.svg)
+![.NET Core Build and Test](https://github.com/BanallyMe/ReadableTypeNames/workflows/.NET%20Core%20Build%20and%20Test/badge.svg)
 
 ## Why use it
 Do you know what type names in native C# look like? For a *simple* type it still looks ok, but as soon as you get a generic it becomes unreadable. Let's look at an ***IEnumerable\<string\>*** for example: While you simply write it as an ***IEnumerable\<string\>*** in C# code, the type's name in its properties is a gorgeous ***IEnumerable\`1***, swallowing the generic type parameters completely. If you need those, you would want to go for the type's FullName property which outputs something like ***System.Collections.Generic.IEnumerable\`1\[\[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\]\]***.
