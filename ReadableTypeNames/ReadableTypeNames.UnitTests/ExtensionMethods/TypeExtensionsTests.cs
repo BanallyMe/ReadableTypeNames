@@ -12,7 +12,7 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
         [Fact]
         public void ThrowsArgumentNullExceptionIfPassedTypeIsNull()
         {
-            Action passingNull = () => Library.GetReadableTypeName(null);
+            Action passingNull = () => Library.GetReadableTypeName(null!);
 
             passingNull.Should().ThrowExactly<ArgumentNullException>()
                 .Which.ParamName.Should().Be("type");
@@ -81,6 +81,7 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
         [InlineData(typeof(KeyValuePair<string, int?>), "KeyValuePair<String, Int32?>")]
         public void ReturnsNameForGenericTypesWithNullableGenericArgumentCorrectly(Type type, string expectedReadableTypeName)
         {
+            
             AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
         }
 
@@ -119,12 +120,38 @@ namespace BanallyMe.ReadableTypeNames.UnitTests.ExtensionMethods
         {
             AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
         }
+        
+        [Theory]
+        [MemberData(nameof(Testdata.yieldReturn), MemberType=typeof(Testdata))]
+        public void ReturnsNameForYieldReturnTypesCorrectly(Type type, string expectedReadableTypeName)
+        {
+            AssertThatTypeReturnsReadableTypeName(type, expectedReadableTypeName);
+        }
 
-        private void AssertThatTypeReturnsReadableTypeName(Type type, string expectedReadableTypeName)
+        private static void AssertThatTypeReturnsReadableTypeName(Type type, string expectedReadableTypeName)
         {
             var returnedReadableTypeName = type.GetReadableTypeName();
 
             returnedReadableTypeName.Should().Be(expectedReadableTypeName);
+        }
+
+        private static class Testdata
+        {
+            public static IEnumerable<object[]> yieldReturn => new List<object[]>
+            {
+                new object[] { NormalYieldReturn().GetType(), "IEnumerable<String>" },
+                new object[] { NestedYieldReturn().GetType(), "IEnumerable<String>[]" },
+            };
+            
+            private static IEnumerable<string> NormalYieldReturn()
+            {
+                yield return "test";
+            }
+
+            private static IEnumerable<IEnumerable<string>> NestedYieldReturn() => new[]
+            {
+                NormalYieldReturn()
+            };
         }
     }
 }

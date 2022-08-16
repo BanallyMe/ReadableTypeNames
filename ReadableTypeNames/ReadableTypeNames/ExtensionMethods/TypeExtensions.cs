@@ -22,6 +22,7 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
             return TryGetNullableTypeName(type)
                 ?? TryGetArrayTypeName(type)
                 ?? TryGetGenericTypeName(type)
+                ?? TryGetYieldReturnTypeName(type)
                 ?? type.Name;
         }
 
@@ -53,6 +54,18 @@ namespace BanallyMe.ReadableTypeNames.ExtensionMethods
             var genericArgumentNames = type.GenericTypeArguments.Select(genericType => genericType.GetReadableTypeName());
             var genericTypesString = string.Join(", ", genericArgumentNames);
             return $"{basicType}<{genericTypesString}>";
+        }
+
+        private static string? TryGetYieldReturnTypeName(Type type)
+        {
+            if (!type.IsNested)
+                return null;
+            
+            var typeInfo = type.GetTypeInfo();
+            if (!typeInfo.IsSealed && typeInfo.Attributes != TypeAttributes.BeforeFieldInit)
+                return null;
+                
+            return typeInfo.ImplementedInterfaces.FirstOrDefault()?.GetReadableTypeName();
         }
     }
 }
